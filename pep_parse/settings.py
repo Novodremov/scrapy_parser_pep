@@ -1,3 +1,5 @@
+from pep_parse.constants import NAME, NUMBER, RESULT_DIR, STATUS
+
 BOT_NAME = 'pep_parse'
 
 SPIDER_MODULES = ['pep_parse.spiders']
@@ -10,9 +12,9 @@ ITEM_PIPELINES = {
 }
 
 FEEDS = {
-    'results/pep_%(time)s.csv': {
+    f'{RESULT_DIR}/pep_%(time)s.csv': {
         'format': 'csv',
-        'fields': ['number', 'name', 'status'],
+        'fields': [NUMBER, NAME, STATUS],
         'overwrite': True
     },
 }

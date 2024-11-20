@@ -1,5 +1,6 @@
 import scrapy
 
+from pep_parse.constants import NAME, NUMBER, STATUS
 from pep_parse.items import PepParseItem
 
 
@@ -19,8 +20,8 @@ class PepSpider(scrapy.Spider):
         pep_title = response.css('h1.page-title::text').get()
         number, name = pep_title.split(' – ', maxsplit=1)
         data = {
-            'number': int(number.split()[1]),
-            'name': name,
-            'status': response.css('abbr::text').get()
+            NUMBER: int(number.split()[1]),
+            NAME: name,
+            STATUS: response.css('abbr::text').get()
         }
         yield PepParseItem(data)
