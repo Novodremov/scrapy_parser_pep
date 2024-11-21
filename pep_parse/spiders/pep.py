@@ -7,14 +7,13 @@ from pep_parse.items import PepParseItem
 class PepSpider(scrapy.Spider):
     name = 'pep'
     allowed_domains = ['peps.python.org']
-    start_urls = ['https://peps.python.org/']
+    start_urls = [f'https://{domain}/' for domain in allowed_domains]
 
     def parse(self, response):
-        rows = response.css('tr')
-        for row in rows:
-            pep_link = row.css('a.pep.reference.internal::attr(href)').get()
-            if pep_link:
-                yield response.follow(pep_link, callback=self.parse_pep)
+        pep_links = response.css(
+            'tr a.pep.reference.internal::attr(href)').getall()
+        for pep_link in pep_links:
+            yield response.follow(pep_link, callback=self.parse_pep)
 
     def parse_pep(self, response):
         pep_title = response.css('h1.page-title::text').get()
